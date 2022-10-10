@@ -13,15 +13,13 @@
 
 #include <list>
 #include <vector>
-#include "../Geometry/Point.h"
-#include "../Geometry/Point2.h"
 
-namespace MeshLib
+
+namespace MF
 {
-	namespace TMeshLib
+	namespace TetMesh
 	{
-
-		class CVertex;
+		class CVertexBase;
 		class CTVertex;
 		class CHalfEdge;
 		class CEdge;
@@ -44,25 +42,20 @@ namespace MeshLib
 
 			bool   & boundary() { return m_bIsBoundary; };
 
-			CVertex *  vertex1() { return m_vertices[0]; };
-			CVertex *  vertex2() { return m_vertices[1]; };
+			CVertexBase*  vertex1() { return m_vertices[0]; };
+			CVertexBase*  vertex2() { return m_vertices[1]; };
 
-			void SetVertex1(CVertex* v) { m_vertices[0] = v; };
-			void SetVertex2(CVertex* v) { m_vertices[1] = v; };
+			void SetVertex1(CVertexBase* v) { m_vertices[0] = v; };
+			void SetVertex2(CVertexBase* v) { m_vertices[1] = v; };
 
-			virtual void _from_string() { };
-			virtual void _to_string() { };
-
-			//std::string & string() { return m_string; };
 		public:
 			size_t& index() { return m_index; };
 		private:
 			size_t m_index;
 		protected:
 			std::vector<CTEdge*> m_lTEdges;
-			CVertex *  m_vertices[2];
+			CVertexBase*  m_vertices[2];
 			bool     m_bIsBoundary;
-			//std::string m_string;
 
 		};
 

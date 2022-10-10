@@ -12,15 +12,12 @@
 #define _TMESHLIB_HALFEDGE_H_
 
 #include <list>
-#include "../Geometry/Point.h"
-#include "../Geometry/Point2.h"
 
-namespace MeshLib
+namespace MF
 {
-	namespace TMeshLib
+	namespace TetMesh
 	{
-
-		class CVertex;
+		class CVertexBase;
 		class CTVertex;
 		class CHalfEdge;
 		class CEdge;
@@ -47,8 +44,8 @@ namespace MeshLib
 
 			~CHalfEdge(){};
 
-			CVertex* source() { return m_pPrev->target(); };
-			CVertex* target()  { return m_pTarget->vert(); };
+			CVertexBase* source() { return m_pPrev->target(); };
+			CVertexBase* target()  { return m_pTarget->vert(); };
 
 			CTVertex * tSource() { return  m_pPrev->tTarget(); };
 			CTVertex * tTarget()  { return m_pTarget; };
@@ -66,9 +63,6 @@ namespace MeshLib
 			void SetPrev(CHalfEdge* pHe){ m_pPrev = pHe; };
 			void SetTEdge(CTEdge* pTe){ m_pTEdge = pTe; };
 			void SetHalfFace(CHalfFace *pF){ m_pHalfFace = pF; };
-
-			virtual void _from_string() { };
-			virtual void _to_string() { };
 
 		public:
 			size_t& index() { return m_index; };

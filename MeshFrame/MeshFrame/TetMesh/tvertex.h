@@ -12,15 +12,13 @@
 #define _TMESHLIB_TVERTEX_H_
 
 #include <list>
-#include "../Geometry/Point.h"
-#include "../Geometry/Point2.h"
 
-namespace MeshLib
+namespace MF
 {
-	namespace TMeshLib
+	namespace TetMesh
 	{
 
-		class CVertex;
+		class CVertexBase;
 		class CHalfEdge;
 		class CEdge;
 		class CHalfFace;
@@ -39,16 +37,13 @@ namespace MeshLib
 
 			int & id() { return m_iID; };
 
-			CVertex         * vert() { return m_pVertex; };
+			CVertexBase* vert() { return m_pVertex; };
 			CTet            *  tet() { return m_pTet; };
 			CHalfEdge       * halfedge() { return m_pHalfedge; };
 
-			void set_vert(CVertex * pV) { m_pVertex = pV; };
+			void set_vert(CVertexBase * pV) { m_pVertex = pV; };
 			void set_tet(CTet        * pT) { m_pTet = pT; };
 			void set_halfedge(CHalfEdge * pH) { m_pHalfedge = pH; };
-
-			virtual void _from_string() { };
-			virtual void _to_string() { };
 
 		public:
 			size_t& index() { return m_index; };
@@ -57,7 +52,7 @@ namespace MeshLib
 		protected:
 			//vertex ID
 			int            m_iID;
-			CVertex      * m_pVertex;
+			CVertexBase* m_pVertex;
 			CTet         * m_pTet;
 			//outgoing, halfedge start from this TVertex
 			CHalfEdge *    m_pHalfedge;

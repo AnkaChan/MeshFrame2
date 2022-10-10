@@ -12,12 +12,11 @@
 #define _TMESHLIB_TET_H_
 
 #include <list>
-namespace MeshLib
+namespace MF
 {
-	namespace TMeshLib
+	namespace TetMesh
 	{
-
-		class CVertex;
+		class CVertexBase;
 		class CTVertex;
 		class CHalfEdge;
 		class CEdge;
@@ -37,8 +36,8 @@ namespace MeshLib
 
 			CHalfFace * half_face(int j) { return m_pHalfFace[j]; };
 			CTVertex *  tvertex(int j) { return m_pTVertex[j]; };
-			CVertex* vertex(int j) { return m_pTVertex[j]->vert(); };
-			const CVertex * vertex(int j) const { return m_pTVertex[j]->vert(); };
+			CVertexBase* vertex(int j) { return m_pTVertex[j]->vert(); };
+			const CVertexBase* vertex(int j) const { return m_pTVertex[j]->vert(); };
 			void setTVertex(CTVertex * pTV, int j) { m_pTVertex[j] = pTV; };
 			void setHalfFace(CHalfFace * pHF, int j) { m_pHalfFace[j] = pHF; };
 
@@ -47,7 +46,6 @@ namespace MeshLib
 			virtual void _from_string() { };
 			virtual void _to_string() { };
 
-			//std::string string() { return m_string; };
 		public:
 			size_t& index() { return m_index; };
 		private:
@@ -57,8 +55,6 @@ namespace MeshLib
 			CHalfFace  * m_pHalfFace[4];
 			CTVertex   * m_pTVertex[4];
 			int          m_iID;
-
-			//std::string m_string;
 		};
 	};
 };

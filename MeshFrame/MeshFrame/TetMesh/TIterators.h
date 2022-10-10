@@ -5,13 +5,13 @@
 #include <iterator>
 #include <memory>
 #include "BaseTMesh.h"
-namespace MeshLib
+namespace MF
 {
-	namespace TMeshLib
+	namespace TetMesh
 	{
-		template <typename TVertexType, typename VertexType, typename HalfEdgeType, typename TEdgeType, typename EdgeType, typename HalfFaceType, typename FaceType, typename TetType>
+		template <typename DType, typename TVertexType, typename VertexType, typename HalfEdgeType, typename TEdgeType, typename EdgeType, typename HalfFaceType, typename FaceType, typename TetType>
 		struct TIteratorCore {
-			typedef CTMesh< TVertexType, VertexType, HalfEdgeType, TEdgeType, EdgeType, HalfFaceType, FaceType, TetType> TMeshType;
+			typedef CTMeshBase<DType, TVertexType, VertexType, HalfEdgeType, TEdgeType, EdgeType, HalfFaceType, FaceType, TetType> TMeshType;
 			typedef TMeshType* TMeshPtr;
 
 			typedef TVertexType* TVPtr;
@@ -927,7 +927,7 @@ namespace MeshLib
 		};
 
 		template <typename TMeshType>
-		struct TIterators : public TIteratorCore<typename TMeshType::TVType, typename TMeshType::VType, typename TMeshType::HEType,
+		struct TIterators : public TIteratorCore<typename TMeshType::DType, typename TMeshType::TVType, typename TMeshType::VType, typename TMeshType::HEType,
 			typename TMeshType::TEType, typename TMeshType::EType, typename TMeshType::HFType, typename TMeshType::FType, typename TMeshType::TType> {
 		};
 		/*

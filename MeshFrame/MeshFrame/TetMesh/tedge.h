@@ -13,12 +13,12 @@
 
 #include <list>
 #include "halfedge.h"
-namespace MeshLib
+namespace MF
 {
-	namespace TMeshLib
+	namespace TetMesh
 	{
 
-		class CVertex;
+		class CVertexBase;
 		class CTVertex;
 		class CHalfEdge;
 		class CEdge;
@@ -61,8 +61,6 @@ namespace MeshLib
 
 			int & key(int k) { return m_key[k]; };
 
-			virtual void _from_string() { };
-			virtual void _to_string() { };
 		public:
 			size_t& index() { return m_index; };
 		private:

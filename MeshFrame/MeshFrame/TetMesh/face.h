@@ -13,12 +13,12 @@
 
 #include <list>
 
-namespace MeshLib
+namespace MF
 {
-	namespace TMeshLib
+	namespace TetMesh
 	{
 
-		class CVertex;
+		class CVertexBase;
 		class CTVertex;
 		class CHalfEdge;
 		class CEdge;
@@ -48,8 +48,6 @@ namespace MeshLib
 			void SetRight(CHalfFace * pHf) { m_pRight = pHf; };
 			bool & boundary(){ return m_bIsBoundary; };
 
-			virtual void _from_string() { };
-			virtual void _to_string() { };
 			size_t& index() { return m_index; };
 
 		protected:
