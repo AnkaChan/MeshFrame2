@@ -1,13 +1,16 @@
-#ifndef _VISURE_STR_H_
-#define _VISURE_STR_H_
+#ifndef _MESHFRAME_STR_H_
+#define _MESHFRAME_STR_H_
+#include <vector>
+#include <string>
 
+namespace MF {
 	struct STR
 	{
-		static void split(std::vector<std::string> & result, const char *str, char c = ' ')
+		static void split(std::vector<std::string>& result, const char* str, char c = ' ')
 		{
 			do
 			{
-				const char *begin = str;
+				const char* begin = str;
 
 				while (*str != c && *str)
 					str++;
@@ -18,13 +21,13 @@
 			return;
 		}
 
-		static void padTo(std::string &str, const size_t num, const char paddingChar = ' ')
+		static void padTo(std::string& str, const size_t num, const char paddingChar = ' ')
 		{
 			if (num > str.size())
 				str.insert(0, num - str.size(), paddingChar);
 		}
 
-		static std::string replace(std::string & inStr, const std::string subStrToReplace, const std::string replacement, bool replaceAll = true) {
+		static std::string replace(std::string& inStr, const std::string subStrToReplace, const std::string replacement, bool replaceAll = true) {
 			std::string outStr;
 			size_t index = 0;
 			outStr = inStr;
@@ -43,4 +46,5 @@
 			return outStr;
 		};
 	};
+}
 #endif

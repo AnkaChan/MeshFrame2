@@ -2,7 +2,7 @@
 #define __PARSER__
 
 #define PUT_TO_JSON(j, arg) j[#arg] = arg
-#define EXTRACT_FROM_JSON(j, arg) parseJsonParameters(j, #arg, arg)
+#define EXTRACT_FROM_JSON(j, arg) MF::parseJsonParameters(j, #arg, arg)
 
 #include <iostream>
 #include "../Json/json.hpp"
@@ -11,6 +11,38 @@ if (argc < n+1) {\
         std::cout << "[Error] Need at least " << n << " input parameters!" << std::endl; \
         return -1;\
 }
+
+#define PARSE_VEC3_INDEXED_BY_ROUND_BRACKET(jsonParam, vec3)\
+std::array<double, 3> vec3##Arr;\
+if (MF::parseJsonParameters(jsonParam, #vec3, vec3##Arr))\
+{\
+	vec3(0) = vec3##Arr[0];\
+	vec3(1) = vec3##Arr[1];\
+	vec3(2) = vec3##Arr[2];\
+}\
+
+#define PARSE_VEC3_INDEXED_BY_SQUARE_BRACKET(jsonParam, vec3)\
+std::array<double, 3> vec3##Arr;\
+if (MF::parseJsonParameters(jsonParam, #vec3, vec3##Arr))\
+{\
+	vec3[0] = vec3##Arr[0];\
+	vec3[1] = vec3##Arr[1];\
+	vec3[2] = vec3##Arr[2];\
+}\
+
+#define PUT_TO_JSON_VEC3_INDEXED_BY_ROUND_BRACKET(jsonParam, vec3)\
+std::array<double, 3> vec3##yArr;\
+vec3##yArr[0] = vec3(0);\
+vec3##yArr[1] = vec3(1);\
+vec3##yArr[2] = vec3(2);\
+jsonParam[#vec3] = vec3##yArr;
+
+#define PUT_TO_JSON_VEC3_INDEXED_BY_SQUARE_BRACKET(jsonParam, vec3)\
+std::array<double, 3> vec3##yArr;\
+vec3##yArr[0] = vec3[0];\
+vec3##yArr[1] = vec3[1];\
+vec3##yArr[2] = vec3[2];\
+jsonParam[#vec3] = vec3##yArr;
 
 namespace MF {
 	inline bool loadJson(std::string  filePath, nlohmann::json& j) {
@@ -60,8 +92,9 @@ namespace MF {
 		}
 		catch (nlohmann::json::exception& e)
 		{
-			std::cout << e.what() << '\n';
-			std::cout << name << " does not exist in json and will be set to default value." << std::endl;
+			std::cout << "When loading: " << name << "\n"
+			    << e.what() << "\n"
+				<< name << " does not exist in json and will be set to default value." << std::endl;
 			return false;
 		}
 		return true;

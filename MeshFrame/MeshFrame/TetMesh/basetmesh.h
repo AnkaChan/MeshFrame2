@@ -45,6 +45,7 @@ namespace MF
 {
 	namespace TetMesh
 	{
+		class CVertexBase;
 
 		/*!
 		* \brief CBaseTMesh, base class for all types of tet-mesh classes; 
@@ -560,20 +561,17 @@ namespace MF
 			{
 				VertexType* pV = *vIter;
 				pV->edges()->shrink_to_fit();
-				pV->tvertices()->shrink_to_fit()
-				pV->_from_string();
+				pV->tvertices()->shrink_to_fit();
 			}
 
 			for (auto tIter = mTContainer.begin(); tIter != mTContainer.end(); tIter++)
 			{
 				TetType* pT = *tIter;
-				pT->_from_string();
 			}
 
 			for (auto eIter = mEContainer.begin(); eIter != mEContainer.end(); eIter++)
 			{
 				EdgeType* pE = *eIter;
-				pE->_from_string();
 			}
 
 			removeVProp(mVTEArrayHandle);
@@ -662,7 +660,7 @@ namespace MF
 					f->SetLeft(pF);
 					pF->SetFace(f);
 
-					for (std::list<HalfFaceType*>::iterator it = pL->begin(); it != pL->end(); it++)
+					for (typename std::list<HalfFaceType*>::iterator it = pL->begin(); it != pL->end(); it++)
 					{
 						HalfFaceType * pH = *it;
 
@@ -1022,7 +1020,7 @@ namespace MF
 			for (auto vIter = mVContainer.begin(); vIter != mVContainer.end(); vIter++)
 			{
 				VertexType * pV = *vIter;
-				CPoint  p = pV->position();
+				Vec3  p = pV->position();
 				for (int k = 0; k < 3; k++)
 				{
 					_os << " " << p[k];
@@ -1099,7 +1097,7 @@ namespace MF
 			for (auto vIter = mVContainer.begin(); vIter != mVContainer.end(); vIter++)
 			{
 				VertexType * pV = *vIter;
-				CPoint p = pV->position();
+				Vec3 p = pV->position();
 				_os << "Vertex " << pV->id();
 				for (int k = 0; k < 3; k++)
 				{
@@ -1170,7 +1168,7 @@ namespace MF
 			for (auto vIter = mVContainer.begin(); vIter != mVContainer.end(); vIter++)
 			{
 				VertexType* pV = *vIter;
-				CPoint p = pV->position();
+				Vec3 p = pV->position();
 				for (int k = 0; k < 3; k++)
 				{
 					if (highPrecision) {
@@ -1260,7 +1258,7 @@ namespace MF
 			for (auto vIter = appearingVerts.begin(); vIter != appearingVerts.end(); vIter++)
 			{
 				VertexType* pV = *vIter;
-				CPoint p = pV->position();
+				Vec3 p = pV->position();
 				for (int k = 0; k < 3; k++)
 				{
 					if (highPrecision) {
@@ -1331,7 +1329,7 @@ namespace MF
 		{
 			std::vector<EdgeType*>* vEdgeList = VertexEdgeList(v1);
 
-			for (std::vector<EdgeType*>::iterator titer = (*vEdgeList).begin(); titer != (*vEdgeList).end(); titer++)
+			for (typename std::vector<EdgeType*>::iterator titer = (*vEdgeList).begin(); titer != (*vEdgeList).end(); titer++)
 			{
 				EdgeType* pE = *titer;
 
@@ -1696,7 +1694,7 @@ namespace MF
 		template <typename EigenDerived3x1>
 		inline void  CTMeshBase<DType, TVertexType, VertexType, HalfEdgeType, TEdgeType, EdgeType, HalfFaceType, FaceType, TetType>::TetCentroid(TetType* pT, EigenDerived3x1& centroid)
 		{
-			TVec3<DType> centroid;
+			centroid = TVec3<DType>::Zero();
 			for (int i = 0; i < 4; ++i) {
 				centroid += TetVertex(pT, i)->position();
 			}

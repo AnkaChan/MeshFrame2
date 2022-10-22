@@ -107,7 +107,7 @@ namespace MF
 				token = stokenizer.getToken();
 				int vIdTFile = strutilTetMesh::parseString<int>(token, iss);
 
-				Vec3 p;
+				TVec3<DType> p;
 				for (int k = 0; k < 3; k++)
 				{
 					stokenizer.nextToken();
@@ -230,7 +230,7 @@ namespace MF
 			// label the boundary for faces and vertices
 			for (auto fIter = mFContainer.begin(); fIter != mFContainer.end(); ++fIter)
 			{
-				FPtr pF = *fIter;
+				FaceType* pF = *fIter;
 				if (this->FaceLeftHalfFace(pF) == NULL || this->FaceRightHalfFace(pF) == NULL)
 				{
 					pF->boundary() = true;

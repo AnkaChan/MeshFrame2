@@ -13,6 +13,8 @@
 #include <fileapi.h>
 #endif
 
+using namespace MF;
+
 bool IO::folderExists(const char* folderName)
 {
 	if (_access(folderName, 0) == -1) {
