@@ -100,6 +100,20 @@ namespace MF {
 		return true;
 	}
 
+	template<typename T>
+	bool convertJsonParameters(nlohmann::json j, T& param) {
+		try
+		{
+			param = j.get<T>();
+		}
+		catch (nlohmann::json::exception& e)
+		{
+			std::cout<< e.what() << "\n";
+			return false;
+		}
+		return true;
+	}
+
 	struct BaseJsonConfig {
 
 		virtual bool fromJson(nlohmann::json& j) = 0;
