@@ -20,7 +20,7 @@ namespace MF
 	namespace TetMesh
 	{
 		template <typename DType>
-		using CTMeshStaticDType =  CTMeshStatic<DType, CTVertex, CVertexStatic<float>, CHalfEdge, CTEdge, CEdge, CHalfFace, CFace, CTet>;
+		using CTMeshStaticDType =  CTMeshStatic<DType, CTVertex, CVertexStatic<DType>, CHalfEdge, CTEdge, CEdge, CHalfFace, CFace, CTet>;
 		typedef CTMeshStaticDType<float> TMeshStaticF;
 		typedef CTMeshStaticDType<double> TMeshStaticD;
 	}

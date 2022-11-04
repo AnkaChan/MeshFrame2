@@ -190,10 +190,10 @@ namespace MF
 			const TContainer & tets() const { return mTContainer; };
 
 			/*! access the vertex with ID */
-			VertexType * idVertex(int id) { return m_map_Vertices[id]; };
+			virtual VertexType * idVertex(int id) { return m_map_Vertices[id]; };
 
 			/*! access the tet with ID */
-			TetType      * idTet(int id) { return m_map_Tets[id]; };
+			virtual TetType      * idTet(int id) { return m_map_Tets[id]; };
 
 
 			//Access Vertex data members
@@ -371,7 +371,7 @@ namespace MF
 
 			void reinitializeVIds();
 
-
+			void tetMeshSurfaceMesh(std::vector<VertexType *>& verts, std::vector<HalfFaceType *>& faces);
 		protected:
 
 			/*!
@@ -542,16 +542,11 @@ namespace MF
 					HalfFaceType* pH =
 						FaceLeftHalfFace(pF) == NULL ? FaceRightHalfFace(pF) : FaceLeftHalfFace(pF);
 					//added by Anka, mark edge as boundary
-					HalfEdgeType* pHE = (HalfEdgeType*)pH->half_edge();
 
 					for (int i = 0; i < 3; ++i)
 					{
-						EdgeType* pE = HalfEdgeEdge(pHE);
 						int vid = pH->key(i);
 						VertexType* v = idVertex(vid);
-						v->boundary() = true;
-						pE->boundary() = true;
-						pHE = HalfEdgeNext(pHE);
 					}
 				}
 			}
@@ -1840,6 +1835,48 @@ namespace MF
 				pV->id() = currentId;
 				++currentId;
 			}
+		}
+
+		template<typename DType, typename TVertexType, typename VertexType, typename HalfEdgeType, typename TEdgeType, typename EdgeType, typename HalfFaceType, typename FaceType, typename TetType>
+		inline void CTMeshBase<DType, TVertexType, VertexType, HalfEdgeType, TEdgeType, EdgeType, HalfFaceType, FaceType, TetType>::tetMeshSurfaceMesh(std::vector<VertexType*>& verts, std::vector<HalfFaceType*>& faces)
+		{
+			verts.clear();
+			faces.clear();
+
+			std::vector<HFPtr> surfaceHFList;
+			auto pVless = [](VPtr pVa, VPtr pVb) {
+				if (pVa->id() < pVb->id())
+					return true;
+				else
+					return false;
+			};
+			std::set<VPtr, decltype(pVless)> vSet(pVless);
+			for (HFPtr pHF : mHFContainer) {
+				if (mHFContainer.hasBeenDeleted(pHF->index()))
+				{
+					continue;
+				}
+				if (HalfFaceDual(pHF) == NULL) {
+					surfaceHFList.push_back(pHF);
+					//for (auto pV : TIt::HF_VIterator(pHF)) {
+					//	vSet.insert(pV);
+					//}
+
+					HalfEdgeType* pHE = (HalfEdgeType*)pHF->half_edge();
+
+					for (int i = 0; i < 3; ++i)
+					{
+						EdgeType* pE = HalfEdgeEdge(pHE);
+						int vid = pHF->key(i);
+						VertexType* pV = idVertex(vid);
+						vSet.insert(pV);
+					}
+				}
+			}
+
+
+			std::copy(vSet.begin(), vSet.end(), std::back_inserter(verts));
+			std::copy(surfaceHFList.begin(), surfaceHFList.end(), std::back_inserter(faces));
 		}
 
 	};

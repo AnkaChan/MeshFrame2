@@ -28,10 +28,18 @@ namespace MF
 			TVec3Block<DType> vert(size_t vId) { return mVertPos.block<3, 1>(0, vId); }
 			Vec4BlockI tet(size_t tId) { return mTetVIds.block<4, 1>(0, tId);  }
 
+			/*! access the vertex with ID */
+			virtual VertexType* idVertex(int id) { return &mVContainer[id]; };
+
+			/*! access the tet with ID */
+			virtual TetType* idTet(int id) { return &mTContainer[id]; };
+
 			/*!
 			Load tet mesh from a ".t" file
 			*/
 			void load_t(const char* input, bool checkOrientation = false);
+
+
 
 		protected:
 			TVerticesMat<DType> mVertPos;
