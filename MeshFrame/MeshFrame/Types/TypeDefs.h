@@ -1,5 +1,6 @@
 #include <Eigen/core>
 #include <Eigen/Dense>
+#include <stdint.h>
 
 #define POINT_VEC_DIMS 3
 
@@ -17,4 +18,5 @@ namespace MF
 	template<typename DType>
 	using TVec3Block = Eigen::Block<TVerticesMat<DType>, POINT_VEC_DIMS, 1>;
 
+	typedef int32_t IdType;
 }

@@ -1866,11 +1866,16 @@ namespace MF
 
 					for (int i = 0; i < 3; ++i)
 					{
-						EdgeType* pE = HalfEdgeEdge(pHE);
 						int vid = pHF->key(i);
 						VertexType* pV = idVertex(vid);
 						vSet.insert(pV);
 					}
+
+					//vSet.insert((VertexType*)pHE->target());
+					//pHE = (HalfEdgeType*)pHE->next();
+					//vSet.insert((VertexType*)pHE->target());
+					//pHE = (HalfEdgeType*)pHE->next();
+					//vSet.insert((VertexType*)pHE->target());
 				}
 			}
 
