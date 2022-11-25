@@ -43,6 +43,14 @@ namespace MF
 			CTVArray * tvertices() { return &m_pTVertices; };
 			std::list<CHalfFace*> * HalfFaces(){ return &m_pHFaces; };
 
+			void setSurfaceMeshVertexPtr(void* in_PSurfaceMeshVertex) {
+				pSurfaceMeshVertex = in_PSurfaceMeshVertex;
+			}
+
+			void* getSurfaceMeshVertexPtr() {
+				return pSurfaceMeshVertex;
+			}
+
 		protected:
 			int    m_id;
 			size_t    m_index;
@@ -54,6 +62,8 @@ namespace MF
 			CEArray      m_pEdges;	    //adjacent Edges;
 
 			//std::string m_string;
+			void* pSurfaceMeshVertex = nullptr;
+
 		};
 	};
 };

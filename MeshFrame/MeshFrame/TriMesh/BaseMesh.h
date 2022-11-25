@@ -1685,22 +1685,22 @@ namespace MF {
 						doubleValue = VTypePtr->position()[1];
 					else if (nameMark == PLY_NAME_MARK::PLY_Z)
 						doubleValue = VTypePtr->position()[2];
-					else if (nameMark == PLY_NAME_MARK::PLY_RED)
-						doubleValue = VTypePtr->color().r;
-					else if (nameMark == PLY_NAME_MARK::PLY_GREEN)
-						doubleValue = VTypePtr->color().g;
-					else if (nameMark == PLY_NAME_MARK::PLY_BLUE)
-						doubleValue = VTypePtr->color().b;
-					else if (nameMark == PLY_NAME_MARK::PLY_NX)
-						doubleValue = VTypePtr->normal()[0];
-					else if (nameMark == PLY_NAME_MARK::PLY_NY)
-						doubleValue = VTypePtr->normal()[1];
-					else if (nameMark == PLY_NAME_MARK::PLY_NZ)
-						doubleValue = VTypePtr->normal()[2];
-					else if (nameMark == PLY_NAME_MARK::PLY_U)
-						doubleValue = VTypePtr->uv()[0];
-					else if (nameMark == PLY_NAME_MARK::PLY_V)
-						doubleValue = VTypePtr->uv()[1];
+					//else if (nameMark == PLY_NAME_MARK::PLY_RED)
+					//	doubleValue = VTypePtr->color().r;
+					//else if (nameMark == PLY_NAME_MARK::PLY_GREEN)
+					//	doubleValue = VTypePtr->color().g;
+					//else if (nameMark == PLY_NAME_MARK::PLY_BLUE)
+					//	doubleValue = VTypePtr->color().b;
+					//else if (nameMark == PLY_NAME_MARK::PLY_NX)
+					//	doubleValue = VTypePtr->normal()[0];
+					//else if (nameMark == PLY_NAME_MARK::PLY_NY)
+					//	doubleValue = VTypePtr->normal()[1];
+					//else if (nameMark == PLY_NAME_MARK::PLY_NZ)
+					//	doubleValue = VTypePtr->normal()[2];
+					//else if (nameMark == PLY_NAME_MARK::PLY_U)
+					//	doubleValue = VTypePtr->uv()[0];
+					//else if (nameMark == PLY_NAME_MARK::PLY_V)
+					//	doubleValue = VTypePtr->uv()[1];
 					else
 						;
 					//Some operation......
@@ -1771,15 +1771,15 @@ namespace MF {
 	template<typename DType, typename VertexType, typename EdgeType, typename FaceType, typename HalfEdgeType>
 	inline bool	CMeshBase<DType, VertexType, EdgeType, FaceType, HalfEdgeType>::write_ply(const char * fileName, int fileType, char** comments, const int& commentNum)
 	{
-		VertexType vExample;
+		/*VertexType vExample;
 		bool hasColor = (vExample.hasColor()) ? true : false;
 		bool hasNormal = (vExample.hasNormal()) ? true : false;
-		bool hasUV = (vExample.hasUV()) ? true : false;
+		bool hasUV = (vExample.hasUV()) ? true : false;*/
 		int numVertexs = mVContainer.size();
 		int numFaces = mFContainer.size();
 		const char *elem_names[] = { "vertex" , "face" };
 		float version;
-		PlyFileReader plyFileReader(hasColor, hasNormal, hasUV);    //used to write .ply file
+		PlyFileReader plyFileReader(false, false, false);    //used to write .ply file
 		PlyFile* plyFile = plyFileReader.ply_open_for_writing(fileName, 2, elem_names, fileType, &version);
 		if (!plyFile) {
 			printf("Can't create plyFile object!\n");
@@ -1801,12 +1801,12 @@ namespace MF {
 		{
 			if (i >= 0 && i <= 2)
 				plyFileReader.ply_describe_property(plyFile, "vertex", i);
-			else if (i >= 3 && i <= 5 && vExample.hasColor())
+	/*		else if (i >= 3 && i <= 5 && vExample.hasColor())
 				plyFileReader.ply_describe_property(plyFile, "vertex", i);
 			else if (i >= 6 && i <= 8 && vExample.hasNormal())
 				plyFileReader.ply_describe_property(plyFile, "vertex", i);
 			else if (i >= 9 && i <= 10 && vExample.hasUV())
-				plyFileReader.ply_describe_property(plyFile, "vertex", i);
+				plyFileReader.ply_describe_property(plyFile, "vertex", i);*/
 		}
 		plyFileReader.ply_element_count(plyFile, "face", numFaces);
 		plyFileReader.ply_describe_property(plyFile, "face", 11);

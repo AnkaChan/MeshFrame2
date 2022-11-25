@@ -12,7 +12,7 @@
 
 namespace MF {
 	namespace TriMesh {
-		class CVertex;
+		class CVertexBase;
 		class CEdge;
 		class CFace;
 
@@ -35,11 +35,11 @@ namespace MF {
 			/*! Pointer to the edge attaching to the current halfedge. */
 			CEdge*& edge() { return m_edge; };
 			/*! Target vertex of the current halfedge. */
-			CVertex*& vertex() { return m_vertex; };
+			CVertexBase*& vertex() { return m_vertex; };
 			/*! Target vertex of the current halfedge. */
-			CVertex*& target() { return m_vertex; };
+			CVertexBase*& target() { return m_vertex; };
 			/*! Source vertex of the current halfedge. */
-			CVertex*& source() { return m_prev->vertex(); };
+			CVertexBase*& source() { return m_prev->vertex(); };
 			/*! Previous halfedge of the current halfedge. */
 			CHalfEdge*& he_prev() { return m_prev; };
 			/*! Next halfedge of the current halfedge. */
@@ -79,7 +79,7 @@ namespace MF {
 			/*! Face, current halfedge attached to. */
 			CFace* m_face = NULL;
 			/*! Target vertex of the current halfedge. */
-			CVertex* m_vertex = NULL;		//target vertex
+			CVertexBase* m_vertex = NULL;		//target vertex
 			/*! Previous halfedge of the current halfedge, in the same face. */
 			CHalfEdge* m_prev = NULL;
 			/*! Next halfedge of the current halfedge, in the same face. */

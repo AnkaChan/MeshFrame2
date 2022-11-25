@@ -19,7 +19,7 @@ namespace MF {
 	namespace TriMesh {
 
 		class CHalfEdge;
-		class CVertex;
+		class CVertexBase;
 
 		/*!
 		\brief CEdge class, which is the base class of all kinds of edge classes
