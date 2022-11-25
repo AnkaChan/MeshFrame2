@@ -1221,7 +1221,7 @@ namespace MF
 				TPtr pT = *tIter;
 				for (int k = 0; k < 4; k++)
 				{
-					VPtr pV = pT->tvertex(k)->vert();
+					VertexType* pV = (VertexType*)pT->tvertex(k)->vert();
 
 					int & vId = gVP(vNewIdsHdl, pV);
 					if (vId == -1) {
@@ -1277,7 +1277,7 @@ namespace MF
 				_os << "4 ";
 				for (int k = 0; k < 4; k++)
 				{
-					_os << " " << gVP(vNewIdsHdl, pT->tvertex(k)->vert());
+					_os << " " << gVP(vNewIdsHdl, (VertexType*)pT->tvertex(k)->vert());
 				}
 				_os << std::endl;
 			}
@@ -1288,6 +1288,8 @@ namespace MF
 			{
 				_os << "10\n";
 			}
+
+			removeVProp(vNewIdsHdl);
 
 			_os.close();
 		}
