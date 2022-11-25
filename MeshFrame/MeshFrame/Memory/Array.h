@@ -156,3 +156,133 @@ private:
 	size_t mSize = 0;
 	size_t mCapacity = preAllocateSize;
 };
+
+// this Array does not allow dynamic memory allocation
+template<typename T, int preAllocateSize >
+class CPArrayStatic {
+public:
+	CPArrayStatic() 
+	{};
+
+	~CPArrayStatic() {
+	}
+
+	T& operator[](const int& i) {
+		assert(i < mSize);
+		return pPreAllocated[i];
+	}
+
+	bool push_back(const T& newMember) {
+		if (mSize + 1 > mCapacity) {
+			return false;
+		}
+
+		pPreAllocated[mSize] = newMember;
+		++mSize;
+		return true;
+	}
+
+	bool push_back(T&& newMember) {
+		if (mSize + 1 > mCapacity) {
+			false;
+		}
+
+		pPreAllocated[mSize] = std::move(newMember);
+		++mSize;
+		return true;
+	}
+
+	void clear() {
+		mSize = 0;
+	}
+
+	void erase(size_t i) {
+		for (size_t j = i; int(j) < int(mSize) - 1; ++j) {
+			pPreAllocated[j] = std::move(pPreAllocated[j + 1]);
+		}
+		--mSize;
+	}
+
+	//erase form index i to i+n-1
+	void eraseN(size_t i, size_t n) {
+		for (size_t j = i; int(j) < int(mSize) - n; ++j) {
+			pPreAllocated[j] = std::move(pPreAllocated[j + n]);
+		}
+		mSize -= n;
+	}
+
+	bool insert(size_t i, const T& memberToInsert) {
+		if (mSize + 1 > mCapacity) {
+			return false;
+		}
+		for (size_t j = mSize; j > i + 1; --j) {
+			pPreAllocated[j] = std::move(pPreAllocated[j - 1]);
+		}
+		pPreAllocated[i + 1] = memberToInsert;
+		++mSize;
+		return true;
+	}
+
+	bool insert(size_t i, T&& memberToInsert) {
+		if (mSize + 1 > mCapacity) {
+			return false;
+		}
+		for (size_t j = mSize; j > i + 1; --j) {
+			pPreAllocated[j] = std::move(pPreAllocated[j - 1]);
+		}
+		pPreAllocated[i + 1] = std::move(memberToInsert);
+		++mSize;
+		return true;
+	}
+
+	//insert n elemets after element with index i, only make rooms for those elements,
+	//need to be initailized by you afterwards.
+	bool insertN(size_t i, int n) {
+		if (mSize + n > mCapacity) {
+			return false;
+		}
+		for (size_t j = mSize + n - 1; j > n + i; --j) {
+			pPreAllocated[j] = std::move(pPreAllocated[j - n]);
+		}
+		mSize += n;
+		return true;
+	}
+
+	T* begin() {
+		return pPreAllocated;
+	}
+	T* end() {
+		return pPreAllocated + mSize;
+	}
+
+	T& front() {
+		return *pPreAllocated;
+	}
+	T& back() {
+		return pPreAllocated[mSize - 1];
+	}
+	T pop_back() {
+		--mSize;
+		return pPreAllocated[mSize];
+	}
+
+	bool empty() {
+		return mSize == 0;
+	}
+
+	bool has(const T& t) {
+		for (int j = 0; j < mSize; ++j) {
+			if (t == pPreAllocated[j]) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	size_t size() { return mSize; }
+	size_t capacity() { return mCapacity; }
+private:
+	alignas(16) T pPreAllocated[preAllocateSize];
+	size_t mSize = 0;
+	size_t mCapacity = preAllocateSize;
+};
