@@ -24,6 +24,14 @@ namespace MF {
 				pTetMeshVertex = in_PTetMeshVertex;
 				in_PTetMeshVertex->setSurfaceMeshVertexPtr((void*)this);
 			}
+			TetMesh::CVertexStatic<DType>* getTetMeshVertPtr() {
+				return pTetMeshVertex;
+			}
+
+			IdType getTetMeshVertId() {
+				return pTetMeshVertex->id();
+			}
+
 
 			TVec3Block<DType> position() {
 				return pTetMeshVertex->position();

@@ -71,6 +71,7 @@ namespace MF {
 		typedef CMeshBase<DType, VertexType, EdgeType, FaceType, HalfEdgeType>* Ptr;
 		typedef std::shared_ptr<CMeshBase<DType, VertexType, EdgeType, FaceType, HalfEdgeType>> * SharedPtr;
 
+		typedef DType DType;
 		typedef VertexType   * VPtr;
 		typedef EdgeType	 * EPtr;
 		typedef FaceType	 * FPtr;
@@ -1746,22 +1747,28 @@ namespace MF {
 	}
 	template<typename DType, typename VertexType, typename EdgeType, typename FaceType, typename HalfEdgeType>
 	inline void CMeshBase<DType, VertexType, EdgeType, FaceType, HalfEdgeType>::reinitializeVId()
-	{
+	{	
+		mVMap.clear();
+
 		int currentId = 0;
 		for (auto pV : mVContainer)
 		{
-				pV->id() = currentId;
-				++currentId;
+			pV->id() = currentId;
+			mVMap.insert(VMapPair(currentId, pV));
+			++currentId;
+
 		}
 	}
 	template<typename DType, typename VertexType, typename EdgeType, typename FaceType, typename HalfEdgeType>
 	inline void CMeshBase<DType, VertexType, EdgeType, FaceType, HalfEdgeType>::reinitializeFId()
 	{
+		mFIdMap.clear();
 		int currentId = 0;
 		for (auto pF : mFContainer)
 		{
-				pF->id() = currentId;
-				++currentId;
+			pF->id() = currentId;
+			mFIdMap.insert(FIdMapPair(currentId, pF));
+			++currentId;
 		}
 	}
 	/*!

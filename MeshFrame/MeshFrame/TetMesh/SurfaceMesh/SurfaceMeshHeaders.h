@@ -5,6 +5,7 @@
 #include "../../TriMesh/MeshCoreHeaders.h"
 
 #include "SurfaceVertexStatic.h"
+#include "SurfaceFaceStatic.h"
 #include "SurfaceMeshStatic.h"
 
 
@@ -14,7 +15,7 @@ namespace MF {
 		//class CSurfaceMeshStatic : TriMesh::CMeshBase<DType, VertexType, EdgeType, FaceType, HalfEdgeType>
 
 		template <typename DType>
-		using CSurfaceMeshStaticDType = CSurfaceMeshStatic<DType, CSurfaceVertexStatic<DType>, TriMesh::CEdge, TriMesh::CFace, TriMesh::CHalfEdge>;
+		using CSurfaceMeshStaticDType = CSurfaceMeshStatic<DType, CSurfaceVertexStatic<DType>, TriMesh::CEdge, CSurfaceFace, TriMesh::CHalfEdge>;
 
 		typedef CSurfaceMeshStaticDType<float> CSurfaceMeshStaticF;
 		typedef CSurfaceMeshStaticDType<double> CSurfaceMeshStaticD;

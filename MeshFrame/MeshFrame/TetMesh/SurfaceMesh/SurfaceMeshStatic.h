@@ -7,7 +7,8 @@ namespace MF
 {
 	namespace TetMesh
 	{
-		// VertexType mush be child class of SurfaceVertexStatic (defined in SurfaceVertex.h)
+		// VertexType must be a child class of SurfaceVertexStatic (defined in SurfaceVertex.h)
+		// FaceType must be a child class of CSurfaceFace
 		template <typename DType, typename VertexType, typename EdgeType, typename FaceType, typename HalfEdgeType>
 		class CSurfaceMeshStatic : public TriMesh::CMeshBase<DType, VertexType, EdgeType, FaceType, HalfEdgeType> {
 		public:
@@ -39,13 +40,15 @@ namespace MF
 
 	 				typename CTetMeshStatic::HEPtr pHE = (CTetMeshStatic::HEPtr)_surfaceFaces[iF]->half_edge();
 					for (int fV = 0; fV < 3; ++fV) {
-						int vId = pHE->target()->id();
+						int vId = pHE->source()->id();
 						currentVs[fV] = mVMap[vId];
 
 						pHE = (CTetMeshStatic::HEPtr)pHE->next();
 					}
 
 					FaceType* currentFace = createFace(currentVs, iF);
+					currentFace->setTetMeshHalfFacePtr(_surfaceFaces[iF]);
+
 					mFIdMap.insert(FIdMapPair(iF, currentFace));
 				}
 
@@ -105,6 +108,8 @@ namespace MF
 			void read_off(const char* input) = delete;
 
 			void copy() = delete;
+
+			void* pTetMesh = nullptr;
 
 		};
 	}

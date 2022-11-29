@@ -34,10 +34,10 @@ namespace MF
 		public:
 			CHalfFace()
 			{
-				m_pHalfEdge = NULL;
-				m_pFace = NULL;
-				m_pTet = NULL;
-				m_pDual = NULL;
+				m_pHalfEdge = nullptr;
+				m_pFace = nullptr;
+				m_pTet = nullptr;
+				m_pDual = nullptr;
 			};
 
 			~CHalfFace(){};
@@ -59,6 +59,14 @@ namespace MF
 				return true;
 			};
 
+			void setSurfaceMeshFacePtr(void * in_pSurfaceMeshFace) {
+				m_surfaceFace = in_pSurfaceMeshFace;
+			}
+
+			void* getSurfaceFacePtr() {
+				return m_surfaceFace;
+			}
+
 		public:
 			size_t& index() { return m_index; };
 		private:
@@ -72,6 +80,7 @@ namespace MF
 			CTet      * m_pTet;
 			CHalfFace * m_pDual;
 			int         m_key[3];
+			void      * m_surfaceFace = nullptr;
 		};
 	};
 };

@@ -113,11 +113,17 @@ namespace MF
 			/*!
 				CTMeshBase constructor
 				*/
-			CTMeshBase() { std::ios::sync_with_stdio(false); };
+			CTMeshBase() {  };
 			/*!
 				CTMeshBase desctructor
 				*/
-			~CTMeshBase() { _clear(); };
+			~CTMeshBase() { 
+				_clear(); 
+				if (pSurfaceMesh != nullptr)
+				{
+					delete pSurfaceMesh;
+				}
+			};
 		
 			/*!
 			Load tet mesh from a ".vtk" file
@@ -195,6 +201,20 @@ namespace MF
 			/*! access the tet with ID */
 			virtual TetType      * idTet(int id) { return m_map_Tets[id]; };
 
+			// get the pointer to the surface mesh, if the surface mesh does not exsit, it will return nullptr
+			void* getSurfaceMeshPtr() { return pSurfaceMesh; }
+
+			// virtual function, should be overloaded to create surface face
+			// the tetmesh will take ownership of the surface mesh, because after this mesh got distructed 
+			// the surface mesh won't be valid either
+			template <typename CSurfaceMesh>
+			CSurfaceMesh* createSurfaceMesh() {
+				CSurfaceMesh* pSurfaceMeshNew =  new CSurfaceMesh();
+				pSurfaceMeshNew->initialize(this);
+				
+				pSurfaceMesh = (void*)pSurfaceMeshNew;
+				return pSurfaceMeshNew;
+			}
 
 			//Access Vertex data members
 			/*! Vertex->Edge List */
@@ -372,6 +392,7 @@ namespace MF
 			void reinitializeVIds();
 
 			void tetMeshSurfaceMesh(std::vector<VertexType *>& verts, std::vector<HalfFaceType *>& faces);
+
 		protected:
 
 			/*!
@@ -453,6 +474,8 @@ namespace MF
 
 			/*! max vertex id */
 			int m_maxVertexId;
+
+			void* pSurfaceMesh = nullptr;
 
 
 			MAKE_PROP_OF(V);
