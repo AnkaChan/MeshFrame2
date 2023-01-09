@@ -20,6 +20,7 @@
 #include <list>
 #include <vector>
 #include <map>
+#include <set>
 #include <string>
 #include <iomanip>
 #include <iterator>
@@ -155,6 +156,7 @@ namespace MF
 			Write selected tets as a simple tet mesh to a .vtk file
 			*/
 			void _write_tet_list_to_vtk(const char* filename, std::vector<TPtr> tets, bool highPrecision = false);
+			void _write_tet_list_to_vtk(const char* filename, std::vector<int> tetIds, bool highPrecision = false);
 
 			/*!
 				access the list of half faces
@@ -1316,6 +1318,19 @@ namespace MF
 
 			_os.close();
 		}
+
+		template<typename DType, typename TVertexType, typename VertexType, typename HalfEdgeType, typename TEdgeType, typename EdgeType, typename HalfFaceType, typename FaceType, typename TetType>
+		inline void CTMeshBase<DType, TVertexType, VertexType, HalfEdgeType, TEdgeType, EdgeType, HalfFaceType, FaceType, TetType>::_write_tet_list_to_vtk(const char* filename, std::vector<int> tets, bool highPrecision)
+		{
+			std::vector<TPtr> tetsPtrs;
+			for (int iTet = 0; iTet < tets.size(); iTet++)
+			{
+				tetsPtrs.push_back(idTet(tets[iTet]));
+			}
+
+			_write_tet_list_to_vtk(filename, tetsPtrs, highPrecision);
+		}
+
 
 		/*------------------------------------------------------------------------------------------------
 		Access Vertex data members

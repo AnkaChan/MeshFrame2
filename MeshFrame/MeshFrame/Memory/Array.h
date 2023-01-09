@@ -13,6 +13,19 @@ public:
 		pMem(pPreAllocated)
 	{};
 
+	// deep copy constructor
+	CPArray(const CPArray & arr) :
+		pMem(pPreAllocated)
+	{
+		reserve(arr.capacity());
+		mSize = 0;
+		for (int i = 0; i < arr.size(); i++)
+		{
+			pMem[mSize] = arr[i];
+			++mSize;;
+		}
+	};
+
 	~CPArray() {
 		if (pMem != pPreAllocated) {
 			delete[] pMem;
@@ -20,6 +33,11 @@ public:
 	}
 
 	T& operator[](const int & i) {
+		assert(i < mSize);
+		return pMem[i];
+	}
+
+	const T& operator[](const int& i) const {
 		assert(i < mSize);
 		return pMem[i];
 	}
@@ -148,8 +166,8 @@ public:
 		return false;
 	}
 
-	size_t size() { return mSize; }
-	size_t capacity() { return mCapacity; }
+	size_t size() const { return mSize; }
+	size_t capacity() const { return mCapacity; }
 private:
 	T pPreAllocated[preAllocateSize];
 	T * pMem;
@@ -286,3 +304,205 @@ private:
 	size_t mSize = 0;
 	size_t mCapacity = preAllocateSize;
 };
+
+template <typename T, int maxSize>
+class CircularArray
+{
+public:
+	CircularArray() {};
+	~CircularArray() {};
+
+	int size() const { return mSize; }
+
+	void clear(bool destruct = false) {
+		while (mSize != 0)
+		{
+			popBack(destruct);
+		}
+	}
+
+	bool has(const T & d) {
+		for (int i = 0; i < size(); i++)
+		{
+			int actualIndex = i + mBeginIdx;
+			if (actualIndex >= maxSize)
+			{
+				actualIndex -= maxSize;
+			}
+			if (d == mData[actualIndex])
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	bool hasBackward(const T& d) {
+		for (int i = size()-1; i >= 0 ; i--)
+		{
+			int actualIndex = i + mBeginIdx;
+			if (actualIndex >= maxSize)
+			{
+				actualIndex -= maxSize;
+			}
+			if (d == mData[actualIndex])
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	T& front() {
+		if (!mSize)
+		{
+			assert(false && "Array is empty! ");
+		}
+		return mData[mBeginIdx];
+	}
+
+	T& back() {
+		if (!mSize)
+		{
+			assert(false && "Array is empty! ");
+		}
+		return mData[mEndIdx];
+	}
+
+	void push_back(const T& newElement) {
+		if (mSize == 0)
+			// array is empty, in this case mBeginIdx == mEndIdx
+		{
+			mData[mEndIdx] = newElement;
+			++mSize;
+		}
+		else
+			// array is not empty
+		{
+			moveIdxForward(mEndIdx);
+			if (mEndIdx != mBeginIdx)
+				// end index hasn't caught up with begin index, increase the size
+			{
+				mData[mEndIdx] = newElement;
+				++mSize;
+			}
+			else
+				// end index has caught up with begin index, the array is full; overwrite the oldest element
+				// the size won't increase in this case
+			{
+				moveIdxForward(mBeginIdx);
+				mData[mEndIdx] = newElement;
+			}
+		}
+
+
+	}
+
+	// set destruct = true to explictly destruct the element
+	void popFront(bool destruct = false) {
+
+		if (mSize != 0)
+		{
+			--mSize;
+
+			int mBeginIdxOld = mBeginIdx;
+			// if its already empty, stay at where it is to make sure mEndIdx == mBeginIds
+			if (mSize != 0) {
+				moveIdxForward(mBeginIdx);
+			}
+			if (destruct)
+			{
+				mData[mBeginIdxOld].~T();
+			}
+			else {
+			}
+		}
+		else
+		{
+			assert(false && "Trying to pop an empty array! ");
+		}
+	}
+
+	// set destruct = true to explictly destruct the element
+	void popBack(bool destruct = false) {
+
+		if (mSize != 0)
+		{
+			--mSize;
+			int mEndIdxOld = mEndIdx;
+			// if its already empty, stay at where it is to make sure mEndIdx == mBeginIds
+			if (mSize != 0) {
+				moveIdxBackward(mEndIdx);
+			}
+			if (destruct)
+			{
+				mData[mEndIdxOld].~T();
+			}
+			else {
+			}
+		}
+		else
+		{
+			assert(false && "Trying to pop an empty array! ");
+		}
+	}
+
+	// count from the oldest element to newest element
+	// 0th is the oldest, (size-1)th is the newest element
+	// it won't detect the if it has exceeded the boundary
+	// you will have to make sure idx < size()
+	T& operator [] (int idx) {
+		int actualIndex = idx + mBeginIdx;
+		if (actualIndex >= maxSize)
+		{
+			actualIndex -= maxSize;
+		}
+
+		return mData[actualIndex];
+	}
+
+	const T& operator []  (int idx) const {
+		int actualIndex = idx + mBeginIdx;
+		if (actualIndex >= maxSize)
+		{
+			actualIndex -= maxSize;
+		}
+
+		return mData[actualIndex];
+	}
+
+
+
+protected:
+	inline void moveIdxForward(int& idx) {
+		++idx;
+		if (idx >= maxSize) {
+			idx = idx - maxSize;
+		}
+	}
+
+	inline void moveIdxBackward(int& idx) {
+		--idx;
+		if (idx < 0) {
+			idx = maxSize - 1;
+		}
+	}
+
+	int mSize = 0;
+
+	// if mBeginIdx == mEndIdx, the array can either be empty or has one element; in this case we need to rely on mSize to determine
+	int mBeginIdx = 0; // the index of the latest element
+	int mEndIdx = 0;   // the index of the newest element
+
+	alignas(16) T mData[maxSize];
+};
+
+template <typename T, int maxSize>
+inline std::ostream& operator<<(std::ostream& os, const CircularArray<T, maxSize>& arr)
+{
+	for (size_t i = 0; i < arr.size(); i++)
+	{
+		os << " " << arr[i];
+	};
+	return os;
+}

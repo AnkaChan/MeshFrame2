@@ -12,7 +12,7 @@
 #include <assert.h>
 #include "./MPIterator.h"
 
-#define DEFAULT_BLOCK_SIZE 2048
+#define DEFAULT_BLOCK_SIZE 4096
 
 template<typename T>
 class MemoryPool {
