@@ -5,6 +5,7 @@
 #define EXTRACT_FROM_JSON(j, arg) MF::parseJsonParameters(j, #arg, arg)
 
 #include <iostream>
+#include <fstream>
 #include "../Json/json.hpp"
 #define REQUIRE_NUM_INPUTS(n)\
 if (argc < n+1) {\
@@ -19,7 +20,7 @@ if (MF::parseJsonParameters(jsonParam, #vec3, vec3##Arr))\
 	vec3(0) = vec3##Arr[0];\
 	vec3(1) = vec3##Arr[1];\
 	vec3(2) = vec3##Arr[2];\
-}\
+}
 
 #define PARSE_VEC3_INDEXED_BY_SQUARE_BRACKET(jsonParam, vec3)\
 std::array<double, 3> vec3##Arr;\
