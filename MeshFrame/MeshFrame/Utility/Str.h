@@ -21,6 +21,15 @@ namespace MF {
 			return;
 		}
 
+		static std::string padToNew(const std::string& str, const size_t num, const char paddingChar = ' ')
+		{
+			std::string newStr = str;
+			if (num > newStr.size())
+				newStr.insert(0, num - newStr.size(), paddingChar);
+
+			return newStr;
+		}
+
 		static void padTo(std::string& str, const size_t num, const char paddingChar = ' ')
 		{
 			if (num > str.size())
@@ -28,6 +37,10 @@ namespace MF {
 		}
 
 		static std::string replace(std::string& inStr, const std::string subStrToReplace, const std::string replacement, bool replaceAll = true) {
+			if (!inStr.size())
+			{
+				return inStr;
+			}
 			std::string outStr;
 			size_t index = 0;
 			outStr = inStr;
