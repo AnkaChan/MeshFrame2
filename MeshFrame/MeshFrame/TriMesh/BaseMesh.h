@@ -69,7 +69,7 @@ namespace MF {
 
 		// pointer to Vertices, Halfedges, Edges, Face and Solid
 		typedef CMeshBase<DType, VertexType, EdgeType, FaceType, HalfEdgeType>* Ptr;
-		typedef std::shared_ptr<CMeshBase<DType, VertexType, EdgeType, FaceType, HalfEdgeType>> * SharedPtr;
+		typedef std::shared_ptr<CMeshBase<DType, VertexType, EdgeType, FaceType, HalfEdgeType>> SharedPtr;
 
 		typedef DType DType;
 		typedef VertexType   * VPtr;
