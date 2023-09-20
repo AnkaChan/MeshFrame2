@@ -2,16 +2,18 @@
 #define _MESHFRAME_MESHSTATIC_H_
 
 #include "BaseMesh.h"
+#include "VertexStatic.h"
+#include "Face.h"
+#include "Edge.h"
+#include "HalfEdge.h"
 
 namespace MF {
 	namespace TriMesh {
-		// VertexType mush be child class of VertexStatic
-		template <typename DType, typename VertexType, typename EdgeType, typename FaceType, typename HalfEdgeType>
-		class CMeshStatic : CMeshBase<DType, VertexType, EdgeType, FaceType, HalfEdgeType> {
-
-		};
+		template <typename DType>
+		using CTriMeshStaticDType = CMeshBase<DType, CVertexStatic<DType>, CEdge, CFace, CHalfEdge>;
+		typedef CTriMeshStaticDType<float> TriMeshStaticF;
+		typedef CTriMeshStaticDType<double> TriMeshStaticD;
 	}
-
 }
 
 #endif

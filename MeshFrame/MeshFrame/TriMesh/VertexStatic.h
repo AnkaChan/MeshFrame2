@@ -23,14 +23,13 @@ namespace MF {
 				mPVertPos = pVertPos;
 			}
 
-			TVec3Block<DType> position() {
-				return mPVertPos->block<3, 1>(0, m_id);
+			TVec3<DType> position() {
+				return pos;
 			}
 
-			virtual void setData(void* pMesh);
 
 		protected:
-			TVerticesMat<DType>* mPVertPos = nullptr;
+			TVec3<DType> pos;
 		};
 
 	}
