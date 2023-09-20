@@ -11,7 +11,7 @@ namespace MF {
 	namespace TriMesh {
 		template<typename DType, typename VertexType, typename EdgeType, typename FaceType, typename HalfEdgeType>
 		struct CIteratorCore {
-		private:
+		public:
 			typedef CMeshBase<DType, VertexType, EdgeType, FaceType, HalfEdgeType> MeshType;
 			typedef MeshType* MeshPtr;
 			typedef VertexType* VPtr;
