@@ -51,6 +51,15 @@ public:
 		++mSize;
 	}
 
+	void emplace_back() {
+		if (mSize + 1 > mCapacity) {
+			reserve(mCapacity + (int)(mCapacity / 2) + 3);
+		}
+
+		pMem[mSize] = T();
+		++mSize;
+	}
+
 	void push_back(T && newMember) {
 		if (mSize + 1 > mCapacity) {
 			reserve(mCapacity + (int)(mCapacity / 2) + 3);
@@ -150,7 +159,16 @@ public:
 	T& front() {
 		return *pMem;
 	}
+
+	const T& front() const {
+		return *pMem;
+	}
+
 	T& back() {
+		return pMem[mSize - 1];
+	}
+
+	const T& back() const {
 		return pMem[mSize - 1];
 	}
 	void pop_back() {
