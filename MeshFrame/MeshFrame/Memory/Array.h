@@ -97,8 +97,15 @@ public:
 
 	}
 
-	void clear() {
+	void clear(bool releaseMemory=false) {
 		mSize = 0;
+		if (releaseMemory) {
+			if (pMem != pPreAllocated) {
+				delete[] pMem;
+				pMem = pPreAllocated;
+				mCapacity = preAllocateSize;
+			}
+		}
 	}
 
 	void erase(size_t i) {
