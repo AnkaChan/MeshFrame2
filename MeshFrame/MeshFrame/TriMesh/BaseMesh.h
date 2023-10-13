@@ -1353,6 +1353,7 @@ namespace MF {
 		EdgeType * pE = mEContainer.newMember(index);
 		assert(pE != NULL);
 		pE->index() = index;
+		pE->id() = index;
 		return pE;
 	}
 	/*! New a face in mesh */
@@ -1447,7 +1448,7 @@ namespace MF {
 			if (pHE->source() == pV1 && pHE->target() == pV0) return pE;
 		}
 		EdgeType * pE = newEdge();
-		pE->id() = (int)pE->index() + 1;
+		pE->id() = (int)pE->index();
 		ledges.push_back(pE);
 		//int idV0 = (pV0->id() < pV1->id()) ? pV0->id() : pV1->id();
 		//int idV1 = (pV0->id() > pV1->id()) ? pV0->id() : pV1->id();
