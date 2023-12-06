@@ -69,13 +69,13 @@ namespace MF {
 
 	}
 
-	inline bool saveJson(std::string  filePath, nlohmann::json& j) {
+	inline bool saveJson(std::string  filePath, nlohmann::json& j, int indent = -1) {
 		std::ofstream ofs(filePath);
 		if (ofs.is_open())
 		{
 			try
 			{
-				ofs << j;
+				ofs << j.dump(indent) << std::endl;
 				return true;
 			}
 			catch (nlohmann::json::exception& e)
@@ -89,7 +89,6 @@ namespace MF {
 			std::cout << "Fail to open: " << filePath << '\n';
 			return false;
 		}
-
 	}
 
 	inline nlohmann::json tryGetJson(nlohmann::json j, std::string  name) {
