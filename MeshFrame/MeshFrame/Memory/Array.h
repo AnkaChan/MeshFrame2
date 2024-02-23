@@ -6,7 +6,7 @@
 // designed to contain basic numerical types, like int, double, pointer
 // not safe for types that require destructor
 
-template<typename T, int preAllocateSize >
+template<typename T, int preAllocateSize>
 class CPArray {
 public:
 	CPArray() : 
@@ -201,13 +201,13 @@ private:
 };
 
 // this Array does not allow dynamic memory allocation
-template<typename T, int preAllocateSize >
-class CPArrayStatic {
+template<typename T, int preAllocateSize, typename SizeType=size_t>
+class CPArrayStaticBase {
 public:
-	CPArrayStatic() 
+	CPArrayStaticBase()
 	{};
 
-	~CPArrayStatic() {
+	~CPArrayStaticBase() {
 	}
 
 	T& operator[](const int& i) {
@@ -215,30 +215,49 @@ public:
 		return pPreAllocated[i];
 	}
 
-	bool push_back(const T& newMember) {
-		if (mSize + 1 > mCapacity) {
-			return false;
-		}
-
-		pPreAllocated[mSize] = newMember;
-		++mSize;
-		return true;
+	const T& operator[](const int& i) const {
+		assert(i < mSize);
+		return pPreAllocated[i];
 	}
 
-	bool push_back(T&& newMember) {
-		if (mSize + 1 > mCapacity) {
-			false;
+
+	// thread safe when using atomic SizeType
+	bool push_back(const T& newMember) {
+		size_t curId = mSize++;
+		if (curId >= mCapacity) {
+			// overflow
+			mSize = mCapacity;
+			return false;
+		}
+		else
+		{
+			pPreAllocated[curId] = newMember;
+			return true;
 		}
 
-		pPreAllocated[mSize] = std::move(newMember);
-		++mSize;
-		return true;
+	}
+
+	// thread safe when using atomic SizeType
+	bool push_back(T&& newMember) {
+		size_t curId = mSize++;
+		if (curId >= mCapacity) {
+			// overflow
+			curId = mCapacity;
+			return false;
+		}
+		else
+		{
+			pPreAllocated[curId] = std::move(newMember);
+			return true;
+		}
+
 	}
 
 	void clear() {
 		mSize = 0;
 	}
 
+	// not thread safe
 	void erase(size_t i) {
 		for (size_t j = i; int(j) < int(mSize) - 1; ++j) {
 			pPreAllocated[j] = std::move(pPreAllocated[j + 1]);
@@ -246,6 +265,7 @@ public:
 		--mSize;
 	}
 
+	// not thread safe
 	//erase form index i to i+n-1
 	void eraseN(size_t i, size_t n) {
 		for (size_t j = i; int(j) < int(mSize) - n; ++j) {
@@ -254,6 +274,7 @@ public:
 		mSize -= n;
 	}
 
+	// not thread safe
 	bool insert(size_t i, const T& memberToInsert) {
 		if (mSize + 1 > mCapacity) {
 			return false;
@@ -266,6 +287,7 @@ public:
 		return true;
 	}
 
+	// not thread safe
 	bool insert(size_t i, T&& memberToInsert) {
 		if (mSize + 1 > mCapacity) {
 			return false;
@@ -322,13 +344,20 @@ public:
 		return false;
 	}
 
-	size_t size() { return mSize; }
-	size_t capacity() { return mCapacity; }
+	size_t size() const  { return mSize; }
+	size_t capacity() const { return mCapacity; }
 private:
 	alignas(16) T pPreAllocated[preAllocateSize];
-	size_t mSize = 0;
-	size_t mCapacity = preAllocateSize;
+	SizeType mSize = 0;
+	const size_t mCapacity = preAllocateSize;
 };
+
+template <typename T, int preAllocateSize>
+using CPArrayStatic = CPArrayStaticBase<T, preAllocateSize, size_t>;
+
+template <typename T, int preAllocateSize>
+using CPArrayStaticAtomic = CPArrayStaticBase<T, preAllocateSize, std::atomic<size_t>>;
+
 
 template <typename T, int maxSize>
 class CircularArray
@@ -524,6 +553,26 @@ protected:
 
 template <typename T, int maxSize>
 inline std::ostream& operator<<(std::ostream& os, const CircularArray<T, maxSize>& arr)
+{
+	for (size_t i = 0; i < arr.size(); i++)
+	{
+		os << " " << arr[i];
+	};
+	return os;
+}
+
+template <typename T, int maxSize, typename SizeType>
+inline std::ostream& operator<<(std::ostream& os, const CPArrayStaticBase<T, maxSize, SizeType>& arr)
+{
+	for (size_t i = 0; i < arr.size(); i++)
+	{
+		os << " " << arr[i];
+	};
+	return os;
+}
+
+template <typename T, int maxSize>
+inline std::ostream& operator<<(std::ostream& os, const CPArray<T, maxSize>& arr)
 {
 	for (size_t i = 0; i < arr.size(); i++)
 	{
