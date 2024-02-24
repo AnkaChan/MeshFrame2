@@ -142,8 +142,14 @@ namespace MF {
 		virtual bool fromJson(nlohmann::json& j) = 0;
 		virtual bool toJson(nlohmann::json& j) = 0;
 
-		bool loadFromJsonFile(const std::string& inJsonParamFile) {
+		bool loadFromJsonFile(const std::string& inJsonParamFile, void * userData_in =nullptr) {
 			nlohmann::json j;
+
+			if (userData_in != nullptr)
+			{
+				userData = userData_in;
+			}
+
 			if (loadJson(inJsonParamFile, j))
 			{
 				if (fromJson(j))
@@ -162,8 +168,14 @@ namespace MF {
 			}
 		}
 
-		bool writeToJsonFile(std::string filePath, int indent = -1) {
+		bool writeToJsonFile(std::string filePath, int indent = -1, void* userData_in = nullptr) {
 			std::ofstream ofs(filePath);
+
+			if (userData_in != nullptr)
+			{
+				userData = userData_in;
+			}
+
 			if (ofs.is_open())
 			{
 				nlohmann::json j;
@@ -177,11 +189,9 @@ namespace MF {
 				return false;
 			}
 		}
+		void* userData = nullptr;
 	};
 
 }
-
-
-
 
 #endif // !__COMMAND_PARSER__
