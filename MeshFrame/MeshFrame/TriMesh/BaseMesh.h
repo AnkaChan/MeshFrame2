@@ -1929,22 +1929,22 @@ namespace MF {
 						VTypePtr->position()[1] = doubleValue;
 					else if (nameMark == PLY_NAME_MARK::PLY_Z)
 						VTypePtr->position()[2] = doubleValue;
-					else if (nameMark == PLY_NAME_MARK::PLY_RED)
-						VTypePtr->color().r = (float)doubleValue;
-					else if (nameMark == PLY_NAME_MARK::PLY_GREEN)
-						VTypePtr->color().g = (float)doubleValue;
-					else if (nameMark == PLY_NAME_MARK::PLY_BLUE)
-						VTypePtr->color().b = (float)doubleValue;
-					else if (nameMark == PLY_NAME_MARK::PLY_NX)
-						VTypePtr->normal()[0] = doubleValue;
-					else if (nameMark == PLY_NAME_MARK::PLY_NY)
-						VTypePtr->normal()[1] = doubleValue;
-					else if (nameMark == PLY_NAME_MARK::PLY_NZ)
-						VTypePtr->normal()[2] = doubleValue;
-					else if (nameMark == PLY_NAME_MARK::PLY_U)
-						VTypePtr->uv()[0] = doubleValue;
-					else if (nameMark == PLY_NAME_MARK::PLY_V)
-						VTypePtr->uv()[1] = doubleValue;
+					//else if (nameMark == PLY_NAME_MARK::PLY_RED)
+					//	VTypePtr->color().r = (float)doubleValue;
+					//else if (nameMark == PLY_NAME_MARK::PLY_GREEN)
+					//	VTypePtr->color().g = (float)doubleValue;
+					//else if (nameMark == PLY_NAME_MARK::PLY_BLUE)
+					//	VTypePtr->color().b = (float)doubleValue;
+					//else if (nameMark == PLY_NAME_MARK::PLY_NX)
+					//	VTypePtr->normal()[0] = doubleValue;
+					//else if (nameMark == PLY_NAME_MARK::PLY_NY)
+					//	VTypePtr->normal()[1] = doubleValue;
+					//else if (nameMark == PLY_NAME_MARK::PLY_NZ)
+					//	VTypePtr->normal()[2] = doubleValue;
+					//else if (nameMark == PLY_NAME_MARK::PLY_U)
+					//	VTypePtr->uv()[0] = doubleValue;
+					//else if (nameMark == PLY_NAME_MARK::PLY_V)
+					//	VTypePtr->uv()[1] = doubleValue;
 					else {
 						PlyOtherProperty* currentOtherProp = currentOtherEle->propList[propIndex];
 						propIndex++;
@@ -2056,15 +2056,16 @@ namespace MF {
 		//clock_t  clockBegin, clockEnd;
 		//clockBegin = clock();
 		VertexType vExample;
-		bool hasColor = (vExample.hasColor()) ? true : false;
-		bool hasNormal = (vExample.hasNormal()) ? true : false;
-		bool hasUV = (vExample.hasUV()) ? true : false;
+		//bool hasColor = (vExample.hasColor()) ? true : false;
+		//bool hasNormal = (vExample.hasNormal()) ? true : false;
+		//bool hasUV = (vExample.hasUV()) ? true : false;
 		int numElements;				//num of element in object    
 		char* currentEleName;			//current element's name
 		int currentEleNum;              //current element's number
 		PlyProperty** propList;         //properties that current elment contains.
 		PlyFile* plyFile;				//current .ply file object
-		PlyFileReader plyFileReader(hasColor, hasNormal, hasUV);    //used to read .ply file
+		// PlyFileReader plyFileReader(hasColor, hasNormal, hasUV);    //used to read .ply file
+		PlyFileReader plyFileReader(false, false, false);    //used to read .ply file
 		/*Open a polygon file for reading*/
 		plyFile = plyFileReader.ply_open_for_reading(fileName);
 		if (!plyFile) {
@@ -2227,7 +2228,7 @@ namespace MF {
 				//}
 				continue;
 			}
-			else if (strcmp(stokenizer.getToken(), "vt") == 0 && vExample.hasUV()) {
+			/*else if (strcmp(stokenizer.getToken(), "vt") == 0 && vExample.hasUV()) {
 				with_uv = true;
 				Vec2 uv;
 				for (int i = 0; i < 2; i++){
@@ -2249,7 +2250,7 @@ namespace MF {
 				}
 				normals.push_back(n);
 				continue;
-			}
+			}*/
 			else if (strcmp(stokenizer.getToken(), "f") == 0){
 				VertexType* v[3];
 				for (int i = 0; i < 3; i++)
@@ -2269,10 +2270,10 @@ namespace MF {
 					}
 
 					v[i] = mVContainer.getPointer(indices[0]-1);
-					if (with_uv && vExample.hasUV())
-						v[i]->uv() = uvs[indices[1] - 1];
-					if (with_normal && vExample.hasNormal())
-						v[i]->normal() = normals[indices[2] - 1];
+					//if (with_uv && vExample.hasUV())
+					//	v[i]->uv() = uvs[indices[1] - 1];
+					//if (with_normal && vExample.hasNormal())
+					//	v[i]->normal() = normals[indices[2] - 1];
 				}
 				createFace(v);
 			}

@@ -290,7 +290,7 @@ namespace MF
 
 			protected:
 				/*! Private construction function, only used to generate begin, end and tmp iterator*/
-				V_EIterator(VPtr pV, typename std::list<EPtr>::iterator iter) :m_pV(pV), m_iter(iter) {};
+				V_EIterator(VPtr pV, typename std::vector<EPtr>::iterator iter) :m_pV(pV), m_iter(iter) {};
 				/*! Edge List of the point */
 				VPtr m_pV;
 				/*! Edge list iterator */

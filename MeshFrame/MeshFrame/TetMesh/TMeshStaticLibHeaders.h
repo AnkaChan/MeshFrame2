@@ -13,8 +13,6 @@
 
 #include "TIterators.h"
 
-
-
 namespace MF
 {
 	namespace TetMesh
